@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -23,11 +24,11 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize resources on startup, clean up on shutdown."""
-    logger.info("🚀 Starting Face Segregation API...")
+    logger.info("Starting Face Segregation API...")
     init_db()
-    logger.info("✅ Database initialized.")
+    logger.info("Database initialized.")
     yield
-    logger.info("👋 Shutting down Face Segregation API.")
+    logger.info("Shutting down Face Segregation API.")
 
 
 # Create FastAPI app
@@ -59,15 +60,10 @@ app.include_router(search.router, prefix=settings.API_PREFIX)
 app.include_router(persons.router, prefix=settings.API_PREFIX)
 
 
-@app.get("/")
+@app.get("/", response_class=FileResponse)
 def root():
-    """Health check endpoint."""
-    return {
-        "service": "Face Segregation API",
-        "version": "1.0.0",
-        "status": "running",
-        "docs": "/docs",
-    }
+    """Serve the frontend UI."""
+    return FileResponse("frontend/index.html")
 
 
 @app.get(f"{settings.API_PREFIX}/stats", response_model=StatsResponse, tags=["Stats"])

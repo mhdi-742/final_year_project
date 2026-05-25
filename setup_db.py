@@ -13,7 +13,7 @@ from app.database import init_db
 
 
 if __name__ == "__main__":
-    print("🔧 Initializing database...")
+    print("Initializing database...")
     init_db()
-    print("✅ Done! The database is ready.")
-    print("💡 Start the server with: uvicorn app.main:app --reload")
+    print("Done! The database is ready.")
+    print("Start the server with: uvicorn app.main:app --reload")

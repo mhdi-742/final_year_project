@@ -29,4 +29,4 @@ def init_db():
     # Import models so they are registered with Base.metadata
     import app.models  # noqa: F401
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created successfully.")
+    print("[OK] Database tables created successfully.")
