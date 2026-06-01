@@ -32,8 +32,8 @@ def search_by_face(
 
     The system will:
     1. Detect the face in the uploaded photo
-    2. Extract its 128-dim embedding
-    3. Search the database for matching faces using L2 distance
+    2. Extract its 128-dim L2-normalized embedding
+    3. Search the database for matching faces using cosine distance
     4. Return all images where that person appears, sorted by similarity
     """
     # Save the query image temporarily
@@ -77,8 +77,9 @@ def search_by_face(
 
             if face and image:
                 distance = match["distance"]
-                # Convert L2 distance to a similarity percentage (0-100%)
-                similarity = max(0.0, (1.0 - distance / settings.FACE_MATCH_THRESHOLD) * 100)
+                # Convert cosine distance to similarity percentage (0-100%)
+                # Cosine distance 0 = identical (100%), distance 1 = orthogonal (0%)
+                similarity = max(0.0, min(100.0, (1.0 - distance) * 100.0))
 
                 results.append(
                     SearchMatch(

@@ -60,10 +60,15 @@ app.include_router(search.router, prefix=settings.API_PREFIX)
 app.include_router(persons.router, prefix=settings.API_PREFIX)
 
 
-@app.get("/", response_class=FileResponse)
+@app.get("/")
 def root():
-    """Serve the frontend UI."""
-    return FileResponse("frontend/index.html")
+    """Health check endpoint."""
+    return {
+        "service": "Face Segregation API",
+        "version": "1.0.0",
+        "status": "running",
+        "docs": "/docs",
+    }
 
 
 @app.get(f"{settings.API_PREFIX}/stats", response_model=StatsResponse, tags=["Stats"])

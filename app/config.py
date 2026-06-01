@@ -14,9 +14,13 @@ class Settings(BaseSettings):
     ORIGINALS_DIR: str = "uploads/originals"
     FACES_DIR: str = "uploads/faces"
 
-    # Face Recognition settings
-    FACE_MATCH_THRESHOLD: float = 0.6  # L2 distance threshold (lower = stricter)
-    FACE_DETECTION_MODEL: str = "hog"  # "hog" (faster, CPU) or "cnn" (more accurate, GPU)
+    # Face Recognition settings (InsightFace ArcFace)
+    # Cosine distance threshold: normed embeddings produce distances 0 (identical) to 2 (opposite)
+    # ArcFace typical same-person distance: 0.0 - 0.4
+    # ArcFace typical different-person distance: 0.5+
+    # The gap is much wider than dlib, making thresholding reliable.
+    FACE_MATCH_THRESHOLD: float = 0.45  # Cosine distance threshold for ArcFace
+    FACE_DETECTION_MODEL: str = "buffalo_l"  # InsightFace model pack
 
     # API
     API_PREFIX: str = "/api"

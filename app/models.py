@@ -49,8 +49,8 @@ class Face(Base):
     image_id = Column(UUID(as_uuid=True), ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
     person_id = Column(UUID(as_uuid=True), ForeignKey("persons.id", ondelete="SET NULL"), nullable=True)
 
-    # 128-dimensional face embedding from face_recognition library
-    embedding = Column(Vector(128))
+    # 512-dimensional face embedding from InsightFace ArcFace model
+    embedding = Column(Vector(512))
 
     # Bounding box coordinates (face_recognition format: top, right, bottom, left)
     bbox_top = Column(Integer)

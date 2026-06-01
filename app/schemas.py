@@ -35,6 +35,7 @@ class PersonResponse(BaseModel):
     name: Optional[str] = None
     label: Optional[str] = None
     face_count: int
+    thumbnail_path: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -72,6 +73,7 @@ class ImageListResponse(BaseModel):
     id: UUID
     original_filename: str
     stored_filename: str
+    filepath: str
     file_size: Optional[int] = None
     face_count: int
     uploaded_at: datetime

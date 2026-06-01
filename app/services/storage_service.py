@@ -32,6 +32,9 @@ class StorageService:
             buffer.write(content)
             file_size = len(content)
 
+        # Normalize to forward slashes for URL compatibility
+        filepath = filepath.replace("\\", "/")
+
         return stored_filename, filepath, file_size
 
     @staticmethod
@@ -44,7 +47,7 @@ class StorageService:
     def save_face_thumbnail(
         image_path: str,
         face_location: Tuple[int, int, int, int],
-        padding: int = 20,
+        padding: int = 40,
     ) -> str:
         """
         Crop a face from the source image and save it as a thumbnail.
@@ -75,7 +78,8 @@ class StorageService:
             thumb_path = os.path.join(settings.FACES_DIR, thumb_filename)
             face_crop.save(thumb_path, "JPEG", quality=90)
 
-        return thumb_path
+        # Normalize to forward slashes for URL compatibility
+        return thumb_path.replace("\\", "/")
 
     @staticmethod
     def delete_file(filepath: str) -> bool:

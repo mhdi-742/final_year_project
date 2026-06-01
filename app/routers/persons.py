@@ -17,7 +17,7 @@ def list_persons(
     limit: int = 50,
     db: Session = Depends(get_db),
 ):
-    """List all identified persons/clusters."""
+    """List all identified persons/clusters with their first face thumbnail."""
     persons = (
         db.query(Person)
         .order_by(Person.created_at.desc())
@@ -25,7 +25,28 @@ def list_persons(
         .limit(limit)
         .all()
     )
-    return persons
+
+    # Attach thumbnail_path from the first face of each person
+    result = []
+    for person in persons:
+        first_face = (
+            db.query(Face)
+            .filter(Face.person_id == person.id, Face.thumbnail_path.isnot(None))
+            .order_by(Face.created_at.asc())
+            .first()
+        )
+        person_dict = {
+            "id": person.id,
+            "name": person.name,
+            "label": person.label,
+            "face_count": person.face_count,
+            "thumbnail_path": first_face.thumbnail_path if first_face else None,
+            "created_at": person.created_at,
+            "updated_at": person.updated_at,
+        }
+        result.append(person_dict)
+
+    return result
 
 
 @router.get("/{person_id}", response_model=PersonDetailResponse)
